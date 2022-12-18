@@ -1,0 +1,12 @@
+spring:
+  jpa:
+    open-in-view: ${SPRING_OPEN_VIEW:false}
+    properties:
+      hibernate:
+        dialect: ${HIBERNATE_DIALECT:org.hibernate.dialect.PostgreSQLDialect}
+    hibernate:
+      ddl-auto: ${HIBERNATE_DLL:update}
+  datasource:
+    username: ${DATASOURCE_USERNAME:postgres}
+    url: ${SPRING_URL:jdbc:postgresql://localhost:5432/postgres}
+    password: ${DATASOURCE_PASSWORD:postgres}
