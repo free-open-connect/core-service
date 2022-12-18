@@ -1,7 +1,7 @@
-version: '3'
+version: '3.5'
 
 networks:
-  core-service-network:
+  postgres:
     driver: bridge
 
 services:
@@ -9,10 +9,10 @@ services:
   core-service-app:
     image: core-service-app
     environment:
-      DATASOURCE_USERNAME: 'postgres'
-      SPRING_URL: 'jdbc:postgresql://core-service-postgres:5432/postgres'
-      DATASOURCE_PASSWORD: 'postgres'
+      DATASOURCE_USERNAME: ${DATASOURCE_USER:postgres}
+      SPRING_URL: ${DATASOURCE_URL:jdbc:postgresql://core-service-postgres:5432/postgres}
+      DATASOURCE_PASSWORD: ${DATASOURCE_PASS:postgres}
     ports:
       - '8080:8080'
     networks:
-      - core-service-network
+      - postgres
