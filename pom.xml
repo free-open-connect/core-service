@@ -18,6 +18,7 @@
         <p6spy.version>1.8.1</p6spy.version>
         <postgresql.version>42.5.1</postgresql.version>
         <flywaydb.version>9.10.1</flywaydb.version>
+        <logbook.version>2.14.0</logbook.version>
     </properties>
     <dependencies>
         <dependency>
@@ -78,6 +79,11 @@
             <groupId>org.flywaydb</groupId>
             <artifactId>flyway-core</artifactId>
             <version>${flywaydb.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.zalando</groupId>
+            <artifactId>logbook-core</artifactId>
+            <version>${logbook.version}</version>
         </dependency>
     </dependencies>
     <build>
