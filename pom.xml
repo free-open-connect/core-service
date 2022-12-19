@@ -17,6 +17,10 @@
         <java.version>17</java.version>
         <p6spy.version>1.8.1</p6spy.version>
         <postgresql.version>42.5.1</postgresql.version>
+        <flywaydb.version>9.10.1</flywaydb.version>
+        <flyway.user>DATASOURCE_USERNAME</flyway.user>
+        <flyway.password>DATASOURCE_PASSWORD</flyway.password>
+        <flyway.schemas>postgres</flyway.schemas>
     </properties>
     <dependencies>
         <dependency>
@@ -73,6 +77,12 @@
             <artifactId>postgresql</artifactId>
             <version>${postgresql.version}</version>
         </dependency>
+        <dependency>
+            <groupId>org.flywaydb</groupId>
+            <artifactId>flyway-core</artifactId>
+            <version>${flywaydb.version}</version>
+        </dependency>
+
     </dependencies>
 
     <build>
@@ -87,6 +97,18 @@
                             <artifactId>lombok</artifactId>
                         </exclude>
                     </excludes>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.flywaydb</groupId>
+                <artifactId>flyway-maven-plugin</artifactId>
+                <version>${flywaydb.version}</version>
+                <configuration>
+                    <user>${flyway.user}</user>
+                    <password>${flyway.password}</password>
+                    <schemas>
+                        <schema>${flyway.schemas}</schema>
+                    </schemas>
                 </configuration>
             </plugin>
         </plugins>
