@@ -11,5 +11,10 @@ spring:
     url: ${SPRING_URL:jdbc:postgresql://localhost:5432/postgres}
     password: ${DATASOURCE_PASSWORD:postgres}
   flyway:
-    enabled: ${FLYWAY_ENABLE:'true'}
-    baselineOnMigrate: ${FLYWAY_MIGRATE:'true'}
+    enabled: ${FLYWAY_ENABLE:true}
+    baselineOnMigrate: ${FLYWAY_MIGRATE:true}
+logging:
+  level:
+    org:
+      zalando:
+        logbook: ${LOGBOOK:TRACE}
