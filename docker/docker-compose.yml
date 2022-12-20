@@ -37,6 +37,38 @@ services:
     depends_on:
       - postgres
 
+  zookeeper:
+    container_name: open-connect-zookeeper
+    image: zookeeper:3.4.9
+    hostname: zookeeper
+    ports:
+      - "2181:2181"
+    environment:
+      ZOO_MY_ID: 1
+      ZOO_PORT: 2181
+      ZOO_SERVERS: server.1=zookeeper:2888:3888
+    volumes:
+      - ./data/zookeeper/data:/data
+      - ./data/zookeeper/datalog:/datalog
+
+  kafka:
+    container_name: open-connect-kafka
+    image: confluentinc/cp-kafka:3.3.1
+    hostname: kafka
+    ports:
+      - "9091:9091"
+    environment:
+      KAFKA_ADVERTISED_LISTENERS: LISTENER_DOCKER_INTERNAL://kafka:19091,LISTENER_DOCKER_EXTERNAL://${DOCKER_HOST_IP:-127.0.0.1}:9091
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: LISTENER_DOCKER_INTERNAL:PLAINTEXT,LISTENER_DOCKER_EXTERNAL:PLAINTEXT
+      KAFKA_INTER_BROKER_LISTENER_NAME: LISTENER_DOCKER_INTERNAL
+      KAFKA_ZOOKEEPER_CONNECT: "zookeeper:2181"
+      KAFKA_BROKER_ID: 1
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+    volumes:
+      - ./data/kafka/data:/var/lib/kafka/data
+    depends_on:
+      - zookeeper
+
   prometheus:
     container_name: open-connect-prometheus
     image: prom/prometheus:latest
@@ -73,6 +105,7 @@ services:
     networks:
       - postgres
     restart: unless-stopped
+
 
   grafana:
     container_name: open-connect-grafana
@@ -132,7 +165,6 @@ networks:
     driver: bridge
   elk:
     driver: bridge  
-
 
 volumes:
   postgres:
