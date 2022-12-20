@@ -56,8 +56,20 @@ services:
       - postgres
     restart: unless-stopped
 
+  grafana:
+    container_name: open-connect-grafana
+    image: grafana/grafana
+    volumes:
+      - grafana_data:/var/lib/grafana
+    ports:
+      - '3000:3000'
+    networks:
+      - monitoring
+
 networks:
   postgres:
+    driver: bridge
+  monitoring:
     driver: bridge
 
 volumes:
@@ -65,3 +77,4 @@ volumes:
   SonarQube_data:
   SonarQube_extensions:
   SonarQube_logs:
+  grafana_data:
