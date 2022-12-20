@@ -69,6 +69,26 @@ services:
     depends_on:
       - zookeeper
 
+  sonarqube:
+    container_name: open-connect-sonarqube
+    image: sonarqube:8.9-community
+    depends_on:
+      - postgres
+    environment:
+      SONAR_JDBC_URL: jdbc:postgresql://postgres:5432/sonar_teste
+      SONAR_JDBC_USERNAME: ${POSTGRES_USER:-postgres}
+      SONAR_JDBC_PASSWORD: ${POSTGRES_PASSWORD:-postgres}
+    volumes:
+      - SonarQube_data:/opt/SonarQube/data
+      - SonarQube_extensions:/opt/SonarQube/extensions
+      - SonarQube_logs:/opt/SonarQube/logs
+    ports:
+      - "9000:9000"
+    networks:
+      - postgres
+    restart: unless-stopped
+
+
   grafana:
     container_name: open-connect-grafana
     image: grafana/grafana
@@ -79,12 +99,59 @@ services:
     networks:
       - monitoring
 
+  Elasticsearch:
+    container_name: open-connect-elasticsearch
+    image: elasticsearch:7.16.2
+    restart: always
+    volumes:
+      - elastic_data:/usr/share/elasticsearch/data/
+    environment:
+      ES_JAVA_OPTS: "-Xmx256m -Xms256m"
+      discovery.type: single-node
+    ports:
+      - '9092:9200'
+      - '9093:9300'
+    networks:
+      - elk
+
+  logstash:
+    container_name: open-connect-logstash
+    image: logstash:7.9.2
+    ports:
+      - '5000:5000'
+    volumes:
+      - type: bind
+        source: ./logstash_pipeline/
+        target: /usr/share/logstash/pipeline
+        read_only: true
+    networks:
+      - elk
+
+  Kibana:
+    container_name: open-connect-kibana
+    image: kibana:7.16.2
+    restart: always
+    ports:
+      - '5601:5601'
+    environment:
+      - ELASTICSEARCH_URL=http://elasticsearch:9200
+    depends_on:
+      - Elasticsearch
+    networks:
+      - elk
+
 networks:
   postgres:
     driver: bridge
   monitoring:
     driver: bridge
+  elk:
+    driver: bridge
 
 volumes:
   postgres:
+  SonarQube_data:
+  SonarQube_extensions:
+  SonarQube_logs:
   grafana_data:
+  elastic_data:
