@@ -37,6 +37,24 @@ services:
     depends_on:
       - postgres
 
+  prometheus:
+    container_name: open-connect-prometheus
+    image: prom/prometheus:latest
+    volumes:
+      - ./prometheus.yml:/etc/prometheus/prometheus.yml
+      - prometheus_data:/prometheus
+    command:
+      - '--config.file=/etc/prometheus/prometheus.yml'
+      - '--storage.tsdb.path=/prometheus'
+      - '--web.console.libraries=/etc/prometheus/console_libraries'
+      - '--web.console.templates=/etc/prometheus/consoles'
+      - '--web.enable-lifecycle'
+    ports:
+      - '9090:9090'
+    networks:
+      - monitoring
+    restart: unless-stopped
+
   sonarqube:
     container_name: open-connect-sonarqube
     image: sonarqube:8.9-community
@@ -113,9 +131,12 @@ networks:
   monitoring:
     driver: bridge
   elk:
-    driver: bridge
+    driver: bridge  
+
 
 volumes:
+  postgres:
+  prometheus_data:
   postgres:
   SonarQube_data:
   SonarQube_extensions:
