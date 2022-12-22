@@ -19,6 +19,9 @@
         <postgresql.version>42.5.1</postgresql.version>
         <flywaydb.version>9.10.1</flywaydb.version>
         <logbook.version>2.14.0</logbook.version>
+        <hibernate.version>6.1.6.Final</hibernate.version>
+        <junit.version>4.13.2</junit.version>
+        <resource.delimiter>^</resource.delimiter>
     </properties>
     <dependencies>
         <dependency>
@@ -43,6 +46,10 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-validation</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-web</artifactId>
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -84,6 +91,18 @@
             <groupId>org.zalando</groupId>
             <artifactId>logbook-core</artifactId>
             <version>${logbook.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.hibernate</groupId>
+            <artifactId>hibernate-core</artifactId>
+            <version>${hibernate.version}</version>
+            <type>pom</type>
+        </dependency>
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>${junit.version}</version>
+            <scope>test</scope>
         </dependency>
     </dependencies>
     <build>

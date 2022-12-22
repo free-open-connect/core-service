@@ -18,3 +18,4 @@ logging:
     org:
       zalando:
         logbook: ${LOGBOOK:TRACE}
+application-version: ${APP_VERSION:^project.version^}
